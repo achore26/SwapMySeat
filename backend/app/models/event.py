@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Integer, DateTime
 from datetime import datetime
 from .base import Base
@@ -12,3 +12,4 @@ class Event(Base):
     location: Mapped[str] = mapped_column(String(255), nullable=False)
 
     event_date: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    tickets: Mapped[list["Ticket"]] = relationship("Ticket", back_populates="event")

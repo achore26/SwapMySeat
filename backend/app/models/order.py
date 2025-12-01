@@ -1,5 +1,5 @@
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import String, Integer, Numeric, DateTime, Enum
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import String, Integer, Numeric, DateTime, Enum, ForeignKey
 from datetime import datetime
 from .base import Base
 import enum
@@ -17,8 +17,8 @@ class Order(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
 
-    ticket_id: Mapped[int] = mapped_column(nullable=False)
-    buyer_id: Mapped[int] = mapped_column(nullable=False)
+    ticket_id: Mapped[int] = mapped_column(ForeignKey("tickets.id"), nullable=False)
+    buyer_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
     amount: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     got_in: Mapped[bool] = mapped_column(default=False)
 
@@ -29,3 +29,8 @@ class Order(Base):
     )
 
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+
+    # Relationships
+    ticket: Mapped["Ticket"] = relationship("Ticket", back_populates="order")
+    buyer: Mapped["User"] = relationship("User", back_populates="orders")
+    escrow: Mapped["Escrow | None"] = relationship("Escrow", back_populates="order", uselist=False)

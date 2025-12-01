@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Integer
 from datetime import datetime
 from .base import Base
@@ -15,5 +15,5 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True, nullable=False)
     password: Mapped[str] = mapped_column(String(255), nullable=False)
 
-    # # one user can sell many tickets
-    # tickets: Mapped[list["Ticket"]] = relationship(back_populates="seller")
+    tickets: Mapped[list["Ticket"]] = relationship("Ticket", back_populates="seller")
+    orders: Mapped[list["Order"]] = relationship("Order", back_populates="buyer")

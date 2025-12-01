@@ -1,5 +1,5 @@
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import String, Integer, Numeric, Enum
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import String, Integer, Numeric, Enum, ForeignKey
 from .base import Base
 import enum
 
@@ -15,8 +15,8 @@ class Ticket(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
 
-    event_id: Mapped[int] = mapped_column(nullable=False)
-    seller_id: Mapped[int] = mapped_column(nullable=False)
+    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"), nullable=False)
+    seller_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
 
     price: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
 
@@ -30,3 +30,7 @@ class Ticket(Base):
         nullable=False,
         default=TicketStatus.AVAILABLE
     )
+    # Relationships
+    seller: Mapped["User"] = relationship("User", back_populates="tickets")
+    event: Mapped["Event"] = relationship("Event", back_populates="tickets")
+    order: Mapped["Order | None"] = relationship("Order", back_populates="ticket", uselist=False)
