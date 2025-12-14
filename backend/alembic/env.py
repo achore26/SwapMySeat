@@ -11,6 +11,7 @@ from app.models.ticket import Ticket
 from app.models.order import Order
 from app.models.escrow import Escrow
 from app.models.event import Event
+from app.models.token_blacklist import BlacklistedToken
 
 import os
 from dotenv import load_dotenv

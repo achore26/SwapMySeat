@@ -2,13 +2,16 @@ from pydantic import BaseModel, EmailStr, Field
 
 
 class UserCreate(BaseModel):
-    username: str = Field(..., min_length=5, max_length=16)
-    email: EmailStr #special pydantic type that verifies emails 
-    password: str = Field(..., min_length = 6)
+    first_name: str = Field(..., min_length=2, max_length=255)
+    last_name: str = Field(..., min_length=2, max_length=255)
+    email: EmailStr  # special pydantic type that verifies emails
+    password: str = Field(..., min_length=6)
+
 
 class UserResponse(BaseModel):
     id: int
-    username: str
+    first_name: str
+    last_name: str
     email: EmailStr
 
     class Config:
@@ -18,4 +21,6 @@ class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
-    
+class TokenResponse(BaseModel):
+    access_token:str
+    token_type: str = "bearer"
